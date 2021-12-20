@@ -1,30 +1,33 @@
 from django.shortcuts import render
 
+secrets = ['2', '3', '4', '5']
 
-# Create your views here.
+history = []
+current_id = 0
 
 
 def index_view(request):
-    return render(request, "index.html")
-
-
-secrets = ['2', '3', '4', '5']
-history = []
-
-
-def result_view(request):
-    if request.method == "POST":
-        nums = request.POST.get('nums').split()
-        res = guess_numbers(secrets, nums)
-        print(nums)
-        return render(request, "result.html", {"result": res})
-    else:
-        return render(request, "result.html")
+    if request.method == "GET":
+        return render(request, "index.html")
+    elif request.method == "POST":
+        res = ''
+        data = request.POST.get('nums')
+        if data:
+            nums = data.split()
+            bulls, cows = guess_numbers(secrets, nums)
+            if bulls == len(secrets):
+                res = 'You got it right!!!'
+            else:
+                res = f'You got {bulls} bulls and {cows} cows.'
+            global current_id
+            current_id += 1
+            history.append({'id': current_id, 'text': data, 'bulls': bulls, 'cows': cows})
+        return render(request, "index.html", {"result": res})
 
 
 def history_view(request):
     if request.method == "GET":
-        return render(request, "history.html")
+        return render(request, "history.html", {'history': history})
 
 
 def guess_numbers(secret, numbers):
@@ -38,8 +41,4 @@ def guess_numbers(secret, numbers):
             bulls += 1
         elif numbers[i] in secret:
             cows += 1
-    if bulls == len(secret):
-        res = 'You got it right!!!'
-    else:
-        res = f'You got {bulls} bulls and {cows} cows.'
-    return res
+    return bulls, cows

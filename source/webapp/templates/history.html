@@ -8,6 +8,9 @@
     <title>Document</title>
 </head>
 <body>
- <h1> History of Game <br> {{ history }} <br> </h1>
+ <h1> History of Game <br> </h1>
+{% for h in history %}
+    <p><h4>step: {{ h.id }},&nbsp&nbsp&nbsp;{{ h.text }},&nbsp&nbsp&nbsp;bulls: {{ h.bulls }},&nbsp&nbsp&nbsp;cows: {{ h.cows }}</h4></p>
+{% endfor %}
 </body>
 </html>
