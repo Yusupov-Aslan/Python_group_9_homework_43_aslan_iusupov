@@ -13,15 +13,18 @@ def index_view(request):
         res = ''
         data = request.POST.get('nums')
         if data:
-            nums = data.split()
-            bulls, cows = guess_numbers(secrets, nums)
-            if bulls == len(secrets):
-                res = 'You got it right!!!'
-            else:
-                res = f'You got {bulls} bulls and {cows} cows.'
-            global current_id
-            current_id += 1
-            history.append({'id': current_id, 'text': data, 'bulls': bulls, 'cows': cows})
+            try:
+                nums = data.split()
+                bulls, cows = guess_numbers(secrets, nums)
+                if bulls == len(secrets):
+                    res = 'You got it right!!!'
+                else:
+                    res = f'You got {bulls} bulls and {cows} cows.'
+                global current_id
+                current_id += 1
+                history.append({'id': current_id, 'text': data, 'bulls': bulls, 'cows': cows})
+            except:
+                res = f"Please input only numbers as indicated above^!"
         return render(request, "index.html", {"result": res})
 
 
