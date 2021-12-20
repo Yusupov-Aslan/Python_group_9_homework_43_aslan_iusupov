@@ -9,16 +9,22 @@ def index_view(request):
 
 
 secrets = ['2', '3', '4', '5']
+history = []
 
 
 def result_view(request):
     if request.method == "POST":
         nums = request.POST.get('nums').split()
-        print(nums)
         res = guess_numbers(secrets, nums)
+        print(nums)
         return render(request, "result.html", {"result": res})
     else:
         return render(request, "result.html")
+
+
+def history_view(request):
+    if request.method == "GET":
+        return render(request, "history.html")
 
 
 def guess_numbers(secret, numbers):
@@ -37,4 +43,3 @@ def guess_numbers(secret, numbers):
     else:
         res = f'You got {bulls} bulls and {cows} cows.'
     return res
-
